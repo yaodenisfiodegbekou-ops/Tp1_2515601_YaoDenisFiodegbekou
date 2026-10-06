@@ -17,3 +17,16 @@ class PasswordGenerator:
         self.use_digits = use_digits
         self.use_symbols = use_symbols
         self.validate = validate
+
+    def _obtenir_ensembles(self):
+        """Retourne la liste des ensembles de caractères sélectionnés."""
+        ensembles = []
+        if self.use_lower:
+            ensembles.append(string.ascii_lowercase)
+        if self.use_upper:
+            ensembles.append(string.ascii_uppercase)
+        if self.use_digits:
+            ensembles.append(string.digits)
+        if self.use_symbols:
+            ensembles.append(string.punctuation)
+        return ensembles
