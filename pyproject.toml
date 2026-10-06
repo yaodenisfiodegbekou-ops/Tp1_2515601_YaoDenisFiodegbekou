@@ -1,0 +1,6 @@
+[project]
+name = "tp1-2515601-yaodenisfiodegbekou"
+version = "0.1.0"
+description = "Gestionnaire de mots de passe (TP1 POO II)"
+requires-python = ">=3.12"
+dependencies = []
