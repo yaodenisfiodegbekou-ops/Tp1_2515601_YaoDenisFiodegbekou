@@ -38,5 +38,15 @@ class PasswordGenerator:
             raise ValueError("Au moins un type de caractères doit être sélectionné.")
 
         tous_les_caracteres = "".join(ensembles)
-        caracteres = [secrets.choice(tous_les_caracteres) for _ in range(self.length)]
+        caracteres =[]
+
+        if self.validate:
+            if self.length < len(ensembles):
+                raise ValueError("La longueur est trop courte")
+        caracteres = [secrets.choice(ensemble) for ensemble in ensembles]
+
+        while len(caracteres) < self.length:
+            caracteres.append(secrets.choice(tous_les_caracteres))
+
+        secrets.SystemRandom().shuffle(caracteres)
         return "".join(caracteres)
