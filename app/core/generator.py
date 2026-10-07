@@ -33,6 +33,9 @@ class PasswordGenerator:
 
     def generer(self):
         """Génère et retourne un mot de passe."""
+        if self.length <= 0:
+            raise ValueError("La longueur doit être supérieure à 0.")
+
         ensembles = self._obtenir_ensembles()
         if not ensembles:
             raise ValueError("Au moins un type de caractères doit être sélectionné.")
