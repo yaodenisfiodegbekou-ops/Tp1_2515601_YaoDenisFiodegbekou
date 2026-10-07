@@ -30,3 +30,13 @@ class PasswordGenerator:
         if self.use_symbols:
             ensembles.append(string.punctuation)
         return ensembles
+
+    def generer(self):
+        """Génère et retourne un mot de passe."""
+        ensembles = self._obtenir_ensembles()
+        if not ensembles:
+            raise ValueError("Au moins un type de caractères doit être sélectionné.")
+
+        tous_les_caracteres = "".join(ensembles)
+        caracteres = [secrets.choice(tous_les_caracteres) for _ in range(self.length)]
+        return "".join(caracteres)
