@@ -31,3 +31,8 @@ class StockageCoffre:
                 raise ValueError(f"Le fichier {self.chemin} contient une entrée invalide.")
 
         return donnees
+
+    def sauvegarder(self, entrees):
+        """Écrit la liste des entrées dans le fichier JSON."""
+        with open(self.chemin, "w", encoding="utf-8") as fichier:
+            json.dump(entrees, fichier, indent=4, ensure_ascii=False)
