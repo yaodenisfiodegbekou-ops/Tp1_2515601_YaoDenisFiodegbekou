@@ -3,7 +3,7 @@
 # GitHub : yaodenisfiodegbekou-ops
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont
+from PySide6.QtGui import QFont, QGuiApplication
 from PySide6.QtWidgets import (QCheckBox, QDialog, QGridLayout, QHBoxLayout, QLabel,
                                QMessageBox, QPushButton, QSlider, QVBoxLayout)
 
@@ -65,11 +65,13 @@ class FenetreGenerateur(QDialog):
         self.label_mot_de_passe.setMinimumWidth(420)
 
     def _creer_boutons(self):
-        """Crée les boutons Masquer et Générer."""
+        """Crée les boutons Masquer, Copier et Générer."""
         self.bouton_masquer = QPushButton("Masquer")
+        self.bouton_copier = QPushButton("Copier")
         self.bouton_generer = QPushButton("Générer")
         self.bouton_generer.setDefault(True)
         self.bouton_masquer.clicked.connect(self.basculer_masque)
+        self.bouton_copier.clicked.connect(self.copier)
         self.bouton_generer.clicked.connect(self.generer)
 
     def _organiser(self):
@@ -88,6 +90,7 @@ class FenetreGenerateur(QDialog):
 
         self.ligne_boutons = QHBoxLayout()
         self.ligne_boutons.addWidget(self.bouton_masquer)
+        self.ligne_boutons.addWidget(self.bouton_copier)
         self.ligne_boutons.addWidget(self.bouton_generer)
 
         layout = QVBoxLayout(self)
@@ -132,3 +135,7 @@ class FenetreGenerateur(QDialog):
         self.masque = not self.masque
         self.bouton_masquer.setText("Afficher" if self.masque else "Masquer")
         self._afficher()
+
+    def copier(self):
+        """Copie le mot de passe dans le presse-papiers."""
+        QGuiApplication.clipboard().setText(self.mot_de_passe)
