@@ -2,7 +2,7 @@
 # Numéro d'étudiant : 2515601
 # GitHub : yaodenisfiodegbekou-ops
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QMainWindow, QMessageBox,
                                QScrollArea, QVBoxLayout, QWidget)
 
@@ -10,18 +10,45 @@ from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QMainWindow, QMessag
 class LigneEntree(QFrame):
     """Une ligne de la liste : un e-mail et son mot de passe masqué."""
 
+    DUREE_REVELATION = 3000
+
     def __init__(self, entree):
         super().__init__()
         self.entree = entree
+        self.revele = False
 
         self.label_email = QLabel(entree["email"])
-        self.label_mot_de_passe = QLabel("*******")
+        self.label_mot_de_passe = QLabel()
         self.setFrameShape(QFrame.Shape.StyledPanel)
 
         layout = QHBoxLayout(self)
         layout.addWidget(self.label_email)
         layout.addStretch()
         layout.addWidget(self.label_mot_de_passe)
+
+        self._afficher()
+
+    def _afficher(self):
+        """Affiche le mot de passe en clair ou masqué."""
+        if self.revele:
+            self.label_mot_de_passe.setText(self.entree["mot_de_passe"])
+        else:
+            self.label_mot_de_passe.setText("*******")
+
+    def reveler(self):
+        """Révèle le mot de passe pendant quelques secondes."""
+        self.revele = True
+        self._afficher()
+        QTimer.singleShot(self.DUREE_REVELATION, self.masquer)
+
+    def masquer(self):
+        """Masque à nouveau le mot de passe."""
+        self.revele = False
+        self._afficher()
+
+    def mouseDoubleClickEvent(self, event):
+        """Révèle le mot de passe lors d'un double-clic."""
+        self.reveler()
 
 
 class FenetrePrincipale(QMainWindow):
