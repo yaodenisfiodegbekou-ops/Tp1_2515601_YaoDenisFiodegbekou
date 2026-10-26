@@ -20,6 +20,7 @@ class FenetreGenerateur(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Générateur de mot de passe")
         self.mot_de_passe = ""
+        self.masque = False
 
         self._creer_longueur()
         self._creer_cases()
@@ -64,9 +65,11 @@ class FenetreGenerateur(QDialog):
         self.label_mot_de_passe.setMinimumWidth(420)
 
     def _creer_boutons(self):
-        """Crée le bouton Générer."""
+        """Crée les boutons Masquer et Générer."""
+        self.bouton_masquer = QPushButton("Masquer")
         self.bouton_generer = QPushButton("Générer")
         self.bouton_generer.setDefault(True)
+        self.bouton_masquer.clicked.connect(self.basculer_masque)
         self.bouton_generer.clicked.connect(self.generer)
 
     def _organiser(self):
@@ -84,6 +87,7 @@ class FenetreGenerateur(QDialog):
         grille_cases.addWidget(self.case_symboles, 1, 1)
 
         self.ligne_boutons = QHBoxLayout()
+        self.ligne_boutons.addWidget(self.bouton_masquer)
         self.ligne_boutons.addWidget(self.bouton_generer)
 
         layout = QVBoxLayout(self)
@@ -117,5 +121,14 @@ class FenetreGenerateur(QDialog):
         self._afficher()
 
     def _afficher(self):
-        """Affiche le mot de passe dans le label."""
-        self.label_mot_de_passe.setText(self.mot_de_passe)
+        """Affiche le mot de passe en clair ou avec des astérisques."""
+        if self.masque:
+            self.label_mot_de_passe.setText("*" * len(self.mot_de_passe))
+        else:
+            self.label_mot_de_passe.setText(self.mot_de_passe)
+
+    def basculer_masque(self):
+        """Passe de l'affichage en clair à l'affichage masqué, et inversement."""
+        self.masque = not self.masque
+        self.bouton_masquer.setText("Afficher" if self.masque else "Masquer")
+        self._afficher()
