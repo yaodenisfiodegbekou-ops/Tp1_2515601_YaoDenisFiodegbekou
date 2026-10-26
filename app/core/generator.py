@@ -46,7 +46,7 @@ class PasswordGenerator:
         if self.validate:
             if self.length < len(ensembles):
                 raise ValueError("La longueur est trop courte")
-        caracteres = [secrets.choice(ensemble) for ensemble in ensembles]
+            caracteres = [secrets.choice(ensemble) for ensemble in ensembles]
 
         while len(caracteres) < self.length:
             caracteres.append(secrets.choice(tous_les_caracteres))
