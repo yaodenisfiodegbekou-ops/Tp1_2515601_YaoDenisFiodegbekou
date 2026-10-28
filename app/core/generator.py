@@ -2,12 +2,16 @@
 # Numéro d'étudiant : 2515601
 # GitHub : yaodenisfiodegbekou-ops
 
-import secrets
-import string
+import random
 
 
 class PasswordGenerator:
     """Génère des mots de passe selon des critères configurables."""
+
+    MINUSCULES = "abcdefghijklmnopqrstuvwxyz"
+    MAJUSCULES = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    CHIFFRES = "0123456789"
+    SYMBOLES = "!@#$%^&*()-_=+[]{};:,.?/"
 
     def __init__(self, length=16, use_lower=True, use_upper=True, use_digits=True,
                  use_symbols=True, validate=False):
@@ -22,13 +26,13 @@ class PasswordGenerator:
         """Retourne la liste des ensembles de caractères sélectionnés."""
         ensembles = []
         if self.use_lower:
-            ensembles.append(string.ascii_lowercase)
+            ensembles.append(self.MINUSCULES)
         if self.use_upper:
-            ensembles.append(string.ascii_uppercase)
+            ensembles.append(self.MAJUSCULES)
         if self.use_digits:
-            ensembles.append(string.digits)
+            ensembles.append(self.CHIFFRES)
         if self.use_symbols:
-            ensembles.append(string.punctuation)
+            ensembles.append(self.SYMBOLES)
         return ensembles
 
     def generer(self):
@@ -46,10 +50,10 @@ class PasswordGenerator:
         if self.validate:
             if self.length < len(ensembles):
                 raise ValueError("La longueur est trop courte")
-            caracteres = [secrets.choice(ensemble) for ensemble in ensembles]
+            caracteres = [random.choice(ensemble) for ensemble in ensembles]
 
         while len(caracteres) < self.length:
-            caracteres.append(secrets.choice(tous_les_caracteres))
+            caracteres.append(random.choice(tous_les_caracteres))
 
-        secrets.SystemRandom().shuffle(caracteres)
+        random.shuffle(caracteres)
         return "".join(caracteres)
