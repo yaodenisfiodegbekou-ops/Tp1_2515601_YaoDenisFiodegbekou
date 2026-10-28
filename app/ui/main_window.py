@@ -136,6 +136,7 @@ class FenetrePrincipale(QMainWindow):
         self.resize(520, 420)
         self.stockage = stockage
         self.ligne_selectionnee = None
+        self.fichier_corrompu = False
         self.entrees = self._charger_entrees()
 
         self._creer_liste()
@@ -148,7 +149,8 @@ class FenetrePrincipale(QMainWindow):
         try:
             return self.stockage.charger()
         except ValueError as erreur:
-            QMessageBox.warning(self, "Erreur", str(erreur))
+            self.fichier_corrompu = True
+            QMessageBox.warning(self, "Erreur", f"{erreur}\nLe coffre-fort démarre vide.")
             return []
 
     def _creer_liste(self):
@@ -251,3 +253,17 @@ class FenetrePrincipale(QMainWindow):
         if reponse == QMessageBox.StandardButton.Yes:
             self.entrees.remove(ligne.entree)
             self._afficher_entrees()
+
+    def closeEvent(self, event):
+        """Sauvegarde les entrées dans le fichier JSON à la fermeture."""
+        if self.fichier_corrompu:
+            reponse = QMessageBox.question(self, "Sauvegarde",
+                                           "Le fichier de départ était corrompu. Le remplacer par le coffre-fort actuel ?")
+            if reponse != QMessageBox.StandardButton.Yes:
+                event.accept()
+                return
+        try:
+            self.stockage.sauvegarder(self.entrees)
+        except Exception as erreur:
+            QMessageBox.critical(self, "Erreur", f"Impossible de sauvegarder le coffre-fort : {erreur}")
+        event.accept()
