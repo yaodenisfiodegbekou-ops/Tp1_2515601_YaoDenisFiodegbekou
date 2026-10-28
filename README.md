@@ -1,11 +1,18 @@
-# Destionnaire de mots de passe
+# Gestionnaire de mots de passe
+
+TP1 du cours de programmation orientée objet II.
 
 ## Auteur
--Yao Denis Fiodegbekou 2515601, 
+
+- Yao Denis Fiodegbekou (2515601), GitHub : yaodenisfiodegbekou-ops
 
 ## Description
 
-Application de génération de gestion de mots de passe
+Application de génération et de gestion de mots de passe, avec une interface en ligne de commande (partie 1) et une interface graphique PySide6 (partie 2).
+
+## Installation
+
+Prérequis : [uv](https://docs.astral.sh/uv/) et Python 3.12 ou plus récent.
 
 ```bash
 git clone https://github.com/yaodenisfiodegbekou-ops/Tp1_2515601_YaoDenisFiodegbekou.git
@@ -16,9 +23,9 @@ uv sync
 ## Utilisation (partie 1 : ligne de commande)
 
 ```bash
-uv run main.py
-uv run main.py --length 20 --validate
-uv run main.py --no-symbols --no-digits
+uv run main.py --no-gui
+uv run main.py --no-gui --length 20 --validate
+uv run main.py --no-gui --no-symbols --no-digits
 ```
 
 | Argument | Description |
