@@ -4,7 +4,7 @@
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QGuiApplication
-from PySide6.QtWidgets import (QCheckBox, QDialog, QGridLayout, QHBoxLayout, QLabel,
+from PySide6.QtWidgets import (QCheckBox, QDialog, QGridLayout, QHBoxLayout, QLabel, QLineEdit,
                                QMessageBox, QPushButton, QSlider, QVBoxLayout)
 
 from app.core.generator import PasswordGenerator
@@ -56,13 +56,12 @@ class FenetreGenerateur(QDialog):
         self.case_validation = QCheckBox("Validation (au moins un caractère de chaque type)")
 
     def _creer_affichage(self):
-        """Crée le grand label qui affiche le mot de passe."""
-        self.label_mot_de_passe = QLabel()
-        self.label_mot_de_passe.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_mot_de_passe.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
-        self.label_mot_de_passe.setFont(QFont("Consolas", 16))
-        self.label_mot_de_passe.setStyleSheet("border: 1px solid gray; padding: 10px;")
-        self.label_mot_de_passe.setMinimumWidth(420)
+        """Crée le grand champ en lecture seule qui affiche le mot de passe."""
+        self.champ_mot_de_passe = QLineEdit()
+        self.champ_mot_de_passe.setReadOnly(True)
+        self.champ_mot_de_passe.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.champ_mot_de_passe.setFont(QFont("Consolas", 16))
+        self.champ_mot_de_passe.setMinimumWidth(420)
 
     def _creer_boutons(self):
         """Crée les boutons Masquer, Copier et Générer."""
@@ -99,7 +98,7 @@ class FenetreGenerateur(QDialog):
         layout.addWidget(QLabel("Types de caractères"))
         layout.addLayout(grille_cases)
         layout.addWidget(self.case_validation)
-        layout.addWidget(self.label_mot_de_passe)
+        layout.addWidget(self.champ_mot_de_passe)
         layout.addLayout(self.ligne_boutons)
 
     def _longueur_changee(self, valeur):
@@ -126,9 +125,9 @@ class FenetreGenerateur(QDialog):
     def _afficher(self):
         """Affiche le mot de passe en clair ou avec des astérisques."""
         if self.masque:
-            self.label_mot_de_passe.setText("*" * len(self.mot_de_passe))
+            self.champ_mot_de_passe.setText("*" * len(self.mot_de_passe))
         else:
-            self.label_mot_de_passe.setText(self.mot_de_passe)
+            self.champ_mot_de_passe.setText(self.mot_de_passe)
 
     def basculer_masque(self):
         """Passe de l'affichage en clair à l'affichage masqué, et inversement."""
