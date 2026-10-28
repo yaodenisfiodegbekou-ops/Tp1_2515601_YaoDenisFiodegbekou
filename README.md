@@ -30,6 +30,28 @@ uv run main.py --no-symbols --no-digits
 | `--no-symbols` | Exclut les symboles |
 | `--validate` | Exige au moins un caractère de chaque type sélectionné |
 
+## Utilisation (partie 2 : interface graphique)
+
+```bash
+uv run main.py
+uv run main.py --vault_file mon_coffre.json
+uv run main.py --no-gui --length 20 --validate
+```
+
+| Argument | Description |
+|---|---|
+| `--no-gui` | Lance seulement la ligne de commande de la partie 1 |
+| `--vault_file` | Fichier JSON du coffre-fort (`vault.json` par défaut) |
+
+### Fonctionnalités
+
+- **Coffre-fort** : liste défilante des comptes, mots de passe masqués par défaut
+- **Révéler** : double-clic ou clic droit sur une entrée (pendant 3 secondes)
+- **Trier** : par e-mail, en ordre alphabétique
+- **Ajouter / Modifier / Supprimer** : la suppression demande une confirmation, et le bouton Générer de la boîte d'ajout utilise la logique de la partie 1
+- **Générateur** : longueur (slider et boutons -/+), types de caractères, validation, masquer/afficher, copier
+- **Sauvegarde** : les entrées sont chargées au démarrage et sauvegardées dans le fichier JSON à la fermeture. Si le fichier est corrompu, un message s'affiche et l'application démarre avec un coffre-fort vide.
+
 ## Maquettes
 
 ### Fenêtre de génération
