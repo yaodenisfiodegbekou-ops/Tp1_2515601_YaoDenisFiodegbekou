@@ -3,8 +3,10 @@
 # GitHub : yaodenisfiodegbekou-ops
 
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QMainWindow, QMessageBox,
-                               QScrollArea, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QFrame, QHBoxLayout, QLabel, QMainWindow, QMenu, QMessageBox,
+                               QPushButton, QScrollArea, QVBoxLayout, QWidget)
+
+from app.ui.generator_ui import FenetreGenerateur
 
 
 class LigneEntree(QFrame):
@@ -50,6 +52,12 @@ class LigneEntree(QFrame):
         """Révèle le mot de passe lors d'un double-clic."""
         self.reveler()
 
+    def contextMenuEvent(self, event):
+        """Affiche un menu au clic droit."""
+        menu = QMenu(self)
+        menu.addAction("Révéler le mot de passe", self.reveler)
+        menu.exec(event.globalPos())
+
 
 class FenetrePrincipale(QMainWindow):
     """Fenêtre du coffre-fort qui affiche la liste des comptes."""
@@ -62,6 +70,7 @@ class FenetrePrincipale(QMainWindow):
         self.entrees = self._charger_entrees()
 
         self._creer_liste()
+        self._creer_boutons()
         self._organiser()
         self._afficher_entrees()
 
@@ -83,17 +92,28 @@ class FenetrePrincipale(QMainWindow):
         self.zone_defilante.setWidgetResizable(True)
         self.zone_defilante.setWidget(self.conteneur)
 
+    def _creer_boutons(self):
+        """Crée les boutons Trier et Générateur."""
+        self.bouton_trier = QPushButton("Trier A → Z")
+        self.bouton_generateur = QPushButton("Générateur")
+
+        self.bouton_trier.clicked.connect(self.trier)
+        self.bouton_generateur.clicked.connect(self.ouvrir_generateur)
+
     def _organiser(self):
         """Place les éléments dans la fenêtre."""
         self.entete = QHBoxLayout()
         self.entete.addWidget(QLabel("Mes comptes"))
         self.entete.addStretch()
+        self.entete.addWidget(self.bouton_trier)
 
         self.ligne_boutons = QHBoxLayout()
+        self.ligne_boutons.addWidget(self.bouton_generateur)
 
         layout = QVBoxLayout()
         layout.addLayout(self.entete)
         layout.addWidget(self.zone_defilante)
+        layout.addWidget(QLabel("Double-clic ou clic droit sur une entrée : révéler le mot de passe"))
         layout.addLayout(self.ligne_boutons)
 
         centre = QWidget()
@@ -109,3 +129,12 @@ class FenetrePrincipale(QMainWindow):
 
         for entree in self.entrees:
             self.layout_liste.addWidget(LigneEntree(entree))
+
+    def trier(self):
+        """Trie les entrées par e-mail, en ordre alphabétique."""
+        self.entrees.sort(key=lambda entree: entree["email"].lower())
+        self._afficher_entrees()
+
+    def ouvrir_generateur(self):
+        """Ouvre la fenêtre du générateur de mot de passe."""
+        FenetreGenerateur(self).exec()
